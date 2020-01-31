@@ -5,9 +5,7 @@ import { CacheService } from './cache.service';
 import { LoadingService } from './loading.service';
 import { ResourceService } from './resource.service';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class GrangeCore {
 
     constructor(

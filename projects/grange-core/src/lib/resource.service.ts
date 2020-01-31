@@ -28,9 +28,7 @@ interface NavigationItems {
     items: NavigationItem[];
 }
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class ResourceService {
     defaultExpand: any = {};
     resourceModified: EventEmitter<{

@@ -1,4 +1,11 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ModuleWithProviders } from '@angular/core';
+import { APIService } from "./api.service";
+import { AuthenticationService } from "./authentication.service";
+import { CacheService } from "./cache.service";
+import { ConfigurationService } from "./configuration.service";
+import { LoadingService } from "./loading.service";
+import { ResourceService } from "./resource.service";
+import { GrangeCore } from "./core.service";
 
 @NgModule({
   declarations: [],
@@ -6,4 +13,19 @@ import { NgModule } from '@angular/core';
   ],
   exports: []
 })
-export class GrangeCoreModule { }
+export class GrangeCoreModule {
+  static forRoot(): ModuleWithProviders {
+    return {
+      ngModule: GrangeCoreModule,
+      providers: [
+        APIService,
+        AuthenticationService,
+        CacheService,
+        ConfigurationService,
+        LoadingService,
+        ResourceService,
+        GrangeCore,
+      ]
+    };
+  }
+}

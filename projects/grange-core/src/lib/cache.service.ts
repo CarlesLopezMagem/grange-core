@@ -7,9 +7,7 @@ import { ConfigurationService } from './configuration.service';
 import { map, publishReplay, refCount, take } from 'rxjs/operators';
 
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class CacheService {
 
     private cache: { [key: string]: Observable<any> } = {};

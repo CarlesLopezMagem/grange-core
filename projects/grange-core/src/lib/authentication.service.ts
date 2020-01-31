@@ -9,9 +9,7 @@ import { AuthenticatedStatus, Error, PasswordResetInfo, UserInfoTokenParts, Logi
 import { tap, catchError, map } from 'rxjs/operators';
 import { ConfigurationService } from './configuration.service';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class AuthenticationService {
     isAuthenticated: BehaviorSubject<AuthenticatedStatus> = new BehaviorSubject(
         { state: false, pending: false, username: null },

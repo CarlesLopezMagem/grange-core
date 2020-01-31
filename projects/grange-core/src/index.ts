@@ -7,3 +7,4 @@ export * from './lib/loading.service';
 export * from './lib/resource.service';
 export * from './lib/interfaces';
 export * from './lib/vocabularies';
+export * from './lib/grange-core.module';

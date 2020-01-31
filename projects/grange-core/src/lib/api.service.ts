@@ -9,9 +9,7 @@ import { LoadingStatus } from './interfaces';
 import { getError } from './authentication.service';
 import { LoadingService } from './loading.service';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class APIService {
 
     public status: BehaviorSubject<LoadingStatus> = new BehaviorSubject(

@@ -4,9 +4,7 @@ import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
 
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class LoadingService {
 
     status = new BehaviorSubject(false);  // loading state
