@@ -15,10 +15,6 @@ export class ConfigurationService {
         }
     }
 
-    set(key: string, value: any) {
-        this.config[key] = value;
-    }
-
     urlToPath(url: string): string {
         const base: string = this.get('BACKEND_URL');
         return url.split(base)[1] || '/';
