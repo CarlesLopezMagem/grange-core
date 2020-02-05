@@ -9,6 +9,8 @@ import {
     WorkflowInformation,
     WorkflowTransitionOptions,
     Resource,
+    GrangeType,
+    GrangeAction,
 } from './interfaces';
 import { Vocabulary } from './vocabularies';
 import { APIService } from './api.service';
@@ -306,6 +308,14 @@ export class ResourceService {
 
     addableTypes(path: string): Observable<string[]> {
         return this.api.get(path + '/@addable-types');
+    }
+
+    allTypes(path: string): Observable<GrangeType[]> {
+        return this.api.get(path + '/@types');
+    }
+
+    actions(path: string): Observable<{[key: string]: GrangeAction[]}> {
+        return this.api.get(path + '/@actions');
     }
 
     sharing(path: string): Observable<string[]> {

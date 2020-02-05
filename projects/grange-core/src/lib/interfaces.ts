@@ -129,3 +129,15 @@ export interface Resource {
     description?: string;
     is_folderish: boolean;
 }
+
+export interface GrangeType {
+    '@id': string;
+    addable: boolean;
+    title: string;
+}
+
+export interface GrangeAction {
+    icon: string;
+    id: string;
+    title: string;
+}
