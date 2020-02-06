@@ -342,6 +342,10 @@ export class ResourceService {
         return this.api.patch(path + '/@registry/' + key, {value: value});
     }
 
+    users(): Observable<any> {
+        return this.api.get('/@users');
+    }
+
     /*
    Make the observable emit resourceModified event when it emits
    */
