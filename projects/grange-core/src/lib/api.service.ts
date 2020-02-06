@@ -78,9 +78,13 @@ export class APIService {
 
     getFullPath(path: string): string {
         const base = this.config.get('BACKEND_URL');
+        const normalize = this.config.get('NORMALIZE_URL');
         // if path is already prefixed by base, no need to prefix twice
         // if path is already a full url no need to prefix either
-        if (path.startsWith(base) || path.startsWith('http:') || path.startsWith('https:')) {
+        if (path.startsWith(normalize)) {
+            return base + path.substring(normalize.length);
+        }
+        if (path.startsWith(base) || path.startsWith(normalize) || path.startsWith('http:') || path.startsWith('https:')) {
             return path;
         } else {
             return base + path;
@@ -89,9 +93,12 @@ export class APIService {
 
     getPath(path: string): string {
         const base: string = this.config.get('BACKEND_URL');
+        const normalize = this.config.get('NORMALIZE_URL');
         // if path is prefixed by base, remove it
         if (path.startsWith(base)) {
             return path.substring(base.length);
+        } else if (path.startsWith(normalize)) {
+            return path.substring(normalize.length);
         } else {
             return path;
         }
