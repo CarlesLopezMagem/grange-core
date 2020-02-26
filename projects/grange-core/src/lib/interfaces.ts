@@ -116,7 +116,7 @@ export interface Batching {
 export interface SearchResults {
     '@id': string;
     items_total: number;
-    items: any[];
+    items: BaseItem[];
     batching: Batching;
 }
 
@@ -139,5 +139,13 @@ export interface GrangeType {
 export interface GrangeAction {
     icon: string;
     id: string;
+    title: string;
+}
+
+export interface BaseItem {
+    '@id': string;
+    '@type': string;
+    description: string;
+    review_state: string;
     title: string;
 }

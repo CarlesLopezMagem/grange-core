@@ -40,34 +40,14 @@ export class ResourceService {
     traversingUnauthorized: EventEmitter<string> = new EventEmitter();
 
     copySource: ReplaySubject<string> = new ReplaySubject<string>(1);
-
+    
     public static getSearchQueryString(
         query: { [key: string]: any },
         options: SearchOptions = {},
     ): string {
         const params: string[] = [];
-        Object.keys(query).map(index => {
-            const criteria = query[index];
-            if (typeof criteria === 'boolean') {
-                params.push(index + '=' + (criteria ? '1' : '0'));
-            } else if (typeof criteria === 'string') {
-                params.push(index + '=' + encodeURIComponent(criteria));
-            } else if (Array.isArray(criteria)) {
-                criteria.map(value => {
-                    params.push(index + '=' + encodeURIComponent(value));
-                });
-            } else if (criteria instanceof Date) {
-                params.push(
-                    index + '=' + encodeURIComponent(criteria.toISOString()),
-                );
-            } else {
-                Object.keys(criteria).map(key => {
-                    params.push(
-                        `${index}.${key}=${encodeURIComponent(criteria[key])}`,
-                    );
-                });
-            }
-        });
+        ResourceService._recursiveGetSearchQueryString(query, params);
+        
         if (options.sort_on) {
             params.push('sort_on=' + options.sort_on);
         }
@@ -108,6 +88,27 @@ export class ResourceService {
                 observer.complete();
             };
         }
+    }
+
+    public static _recursiveGetSearchQueryString(query: { [key: string]: any }, params: string[] = [], prefix = '') {
+        Object.keys(query).map(index => {
+            const criteria = query[index];
+            if (typeof criteria === 'boolean') {
+                params.push(prefix + index + '=' + (criteria ? '1' : '0'));
+            } else if (['string', 'number'].includes(typeof criteria)) {
+                params.push(prefix + index + '=' + encodeURIComponent(criteria));
+            } else if (Array.isArray(criteria)) {
+                criteria.map(value => {
+                    params.push(prefix + index + '=' + encodeURIComponent(value));
+                });
+            } else if (criteria instanceof Date) {
+                params.push(
+                    prefix + index + '=' + encodeURIComponent(criteria.toISOString()),
+                );
+            } else {
+                ResourceService._recursiveGetSearchQueryString(criteria, params, `${index}.`);
+            }
+        });
     }
 
     constructor(
@@ -342,8 +343,12 @@ export class ResourceService {
         return this.api.patch(path + '/@registry/' + key, {value: value});
     }
 
-    users(): Observable<any> {
-        return this.api.get('/@users');
+    users(query?: string): Observable<any> {
+        let path = '/@users';
+        if (query) {
+            path += `?query=${query}`;
+        }
+        return this.api.get(path);
     }
 
     /*
