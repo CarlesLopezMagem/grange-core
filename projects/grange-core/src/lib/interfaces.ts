@@ -149,3 +149,10 @@ export interface BaseItem {
     review_state: string;
     title: string;
 }
+
+export interface Role {
+    '@id': string;
+    '@type': string;
+    id: string;
+    title: string;
+}

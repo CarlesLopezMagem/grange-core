@@ -11,6 +11,7 @@ import {
     Resource,
     GrangeType,
     GrangeAction,
+    Role,
 } from './interfaces';
 import { Vocabulary } from './vocabularies';
 import { APIService } from './api.service';
@@ -343,12 +344,28 @@ export class ResourceService {
         return this.api.patch(path + '/@registry/' + key, {value: value});
     }
 
-    users(query?: string): Observable<any> {
+    users(query: string): Observable<any> {
         let path = '/@users';
         if (query) {
             path += `?query=${query}`;
         }
-        return this.api.get(path);
+        return this.cache.get(path);
+    }
+
+    createUser(user: any): Observable<any> {
+        return this.create('/@users', user);
+    }
+
+    updateUser(user: any): Observable<any> {
+        return this.update(`/@users/${user.id}`, user);
+    }
+
+    deleteUser(user: any): Observable<any> {
+        return this.delete(`/@users/${user.id}`);
+    }
+
+    roles(): Observable<Array<Role>> {
+        return this.cache.get('/@roles');
     }
 
     /*
