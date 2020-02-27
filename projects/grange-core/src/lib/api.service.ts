@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, timer, throwError } from 'rxjs';
-import { catchError, map, retryWhen, tap, timeout, delayWhen } from 'rxjs/operators';
+import { catchError, map, retryWhen, tap, timeout, delayWhen, finalize } from 'rxjs/operators';
 
 import { AuthenticationService } from './authentication.service';
 import { ConfigurationService } from './configuration.service';
@@ -11,6 +11,8 @@ import { LoadingService } from './loading.service';
 
 @Injectable()
 export class APIService {
+
+    protected lazzyRequests = 0;
 
     public status: BehaviorSubject<LoadingStatus> = new BehaviorSubject(
         { loading: false }
@@ -104,7 +106,26 @@ export class APIService {
         }
     }
 
-    private wrapRequest<T>(request: Observable<T>): Observable<T> {
+    protected addRequest(): [any, BehaviorSubject<boolean>] {
+        const done: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+        const timerId = setTimeout(() => {
+            // LoaderHud.show();
+            this.lazzyRequests++;
+            done.next(true);
+        }, 300);
+        return [timerId, done];
+    }
+
+    private finsihRequest(timerId: any, done: BehaviorSubject<boolean>) {
+        clearTimeout(timerId);
+        if (done.value) {
+            setTimeout(() => {
+                this.lazzyRequests--;
+                this.lazzyRequests = Math.max(0, this.lazzyRequests);
+            }, 300);
+        }
+    }
+    protected _wrapRequest<T>(request: Observable<T>): Observable<T> {
         const clientTimeout = this.config.get('CLIENT_TIMEOUT', 15000);
         let attempts = 0;
         return request.pipe(
@@ -125,7 +146,13 @@ export class APIService {
             tap(() => this.setBackendAvailability(true)),
             catchError((errorResponse: HttpErrorResponse) => {
                 return throwError(getError(errorResponse));
-            })
+            }),
+        );
+    }
+    private wrapRequest<T>(request: Observable<T>): Observable<T> {
+        const [timerId, done] = this.addRequest();
+        return this._wrapRequest(request).pipe(
+            finalize(() => { setTimeout(() => { this.finsihRequest(timerId, done); }); })
         );
     }
 

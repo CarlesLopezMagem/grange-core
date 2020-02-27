@@ -364,6 +364,26 @@ export class ResourceService {
         return this.delete(`/@users/${user.id}`);
     }
 
+    groups(query: string): Observable<any> {
+        let path = '/@groups';
+        if (query) {
+            path += `?query=${query}`;
+        }
+        return this.cache.get(path);
+    }
+
+    createGroup(group: any): Observable<any> {
+        return this.create('/@groups', group);
+    }
+
+    updateGroup(group: any): Observable<any> {
+        return this.update(`/@groups/${group.id}`, group);
+    }
+
+    deleteGroup(group: any): Observable<any> {
+        return this.delete(`/@groups/${group.id}`);
+    }
+
     roles(): Observable<Array<Role>> {
         return this.cache.get('/@roles');
     }
