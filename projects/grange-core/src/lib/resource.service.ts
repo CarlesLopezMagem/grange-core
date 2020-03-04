@@ -230,7 +230,7 @@ export class ResourceService {
     }
 
     save(path: string, model: any): Observable<any> {
-        return this.emittingModified(this.api.put(path, model), path);
+        return this.emittingModified(this.api.patch(path, model), path);
     }
 
     navigation(): Observable<NavLink[]> {
