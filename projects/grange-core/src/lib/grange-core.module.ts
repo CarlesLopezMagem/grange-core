@@ -18,10 +18,10 @@ export class GrangeCoreModule {
     return {
       ngModule: GrangeCoreModule,
       providers: [
+        ConfigurationService,
         APIService,
         AuthenticationService,
         CacheService,
-        ConfigurationService,
         LoadingService,
         ResourceService,
         GrangeCore,
