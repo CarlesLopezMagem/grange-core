@@ -4,7 +4,7 @@ import {
     HttpHeaders,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { AuthenticatedStatus, Error, PasswordResetInfo, UserInfoTokenParts, LoginToken } from './interfaces';
 import { tap, catchError, map } from 'rxjs/operators';
 import { ConfigurationService } from './configuration.service';
@@ -137,7 +137,7 @@ export class AuthenticationService {
                             error: error.message,
                         });
                     }
-                    return Observable.throw(error);
+                    return throwError(error);
                 })
             );
     }
