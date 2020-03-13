@@ -157,3 +157,16 @@ export interface Role {
     id: string;
     title: string;
 }
+export interface GrangeFile {
+    'content-type': string;
+    data?: string;
+    encoding?: string;
+    download?: string;
+    filename: string;
+    size?: number;
+}
+
+export interface GrangeImage extends GrangeFile {
+    height?: number;
+    width?: number;
+}
